@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="hlabol.css">
+    <title>Heart Attack Risk Assessment</title>
+</head>
+<body>
+<div class="container"> <a href="index.html" class="tag"><h1>Heart Attack Risk Assessment Form</h1></a>
+
+<form id="heartAttackFormPart1" class="page1">
+    <h2>Personal Information</h2>
+    <label for="age">Age (years):</label>
+    <input type="number" id="age" name="age" class="age-inp" max="100"required><br><br>
+    <div id="ageError" style="color: red; display: none;">Please enter a valid age between 18 and 100.</div><br> <!-- Error message container -->
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+        <option value="">Select</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+    </select><br><br>
+
+    <h2>Medical History</h2>
+    <label for="high_bp">Do you have a history of high blood pressure? (Yes/No)</label>
+    <input type="radio" id="high_bp_yes" name="high_bp" value="yes" required> Yes
+    <input type="radio" id="high_bp_no" name="high_bp" value="no" required> No<br><br>
+
+    <label for="high_chol">Do you have a history of high cholesterol? (Yes/No)</label>
+    <input type="radio" id="high_chol_yes" name="high_chol" value="yes" required> Yes
+    <input type="radio" id="high_chol_no" name="high_chol" value="no" required> No<br><br>
+
+    <label for="family_history">Do you have a family history of heart disease? (Yes/No)</label>
+    <input type="radio" id="family_history_yes" name="family_history" value="yes" required> Yes
+    <input type="radio" id="family_history_no" name="family_history" value="no" required> No<br><br>
+
+    <label for="diabetes">Have you ever been diagnosed with diabetes? (Yes/No)</label>
+    <input type="radio" id="diabetes_yes" name="diabetes" value="yes" required> Yes
+    <input type="radio" id="diabetes_no" name="diabetes" value="no" required> No<br><br>
+
+    <button type="button" onclick="validateAgeAndProceed()"  >Next</button>
+</form>
+</div>
+<script>
+
+
+function validateAgeAndProceed() {
+        var age = parseInt(document.getElementById("age").value);
+        var ageError = document.getElementById("ageError");
+
+        if (age < 18 || age > 100) {
+            ageError.style.display = "block"; // Show error message
+        } else {
+            ageError.style.display = "none"; // Hide error message
+            nextPage(); // Proceed to the next page
+        }
+    }
+
+     function nextPage() {
+        // Fetching user inputs (Part 1)
+        var age = parseInt(document.getElementById("age").value);
+        var high_bp = document.querySelector('input[name="high_bp"]:checked').value;
+        var high_chol = document.querySelector('input[name="high_chol"]:checked').value;
+        var family_history = document.querySelector('input[name="family_history"]:checked').value;
+        var diabetes = document.querySelector('input[name="diabetes"]:checked').value;
+
+        // Saving data to localStorage
+        localStorage.setItem("age", age);
+        localStorage.setItem("high_bp", high_bp);
+        localStorage.setItem("high_chol", high_chol);
+        localStorage.setItem("family_history", family_history);
+        localStorage.setItem("diabetes", diabetes);
+
+        // Redirecting to the next page
+        window.location.href = "page2.html";
+    }
+
+
+
+  
+</script>
+
+</body>
+</html>

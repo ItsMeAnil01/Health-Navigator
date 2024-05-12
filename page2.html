@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="hlabol.css">
+    <title>Heart Attack Risk Assessment</title>
+</head>
+<body>
+
+<h1>Heart Attack Risk Assessment Form</h1>
+
+<form id="heartAttackFormPart2">
+    <h2>Lifestyle Habits</h2>
+
+    <label for="smoking">Do you smoke cigarettes? (Yes/No)</label>
+    <input type="radio" id="smoking_yes" name="smoking" value="yes" required> Yes
+    <input type="radio" id="smoking_no" name="smoking" value="no" required> No<br><br>
+
+    <label for="alcohol">How many alcoholic drinks do you consume per week (on average)?</label>
+    <input type="number" id="alcohol" name="alcohol" min="0" class="alc-inp" required><br><br>
+
+    <label for="exercise">How often do you engage in moderate-intensity physical activity (e.g., brisk walking, swimming) for at least 30 minutes?</label>
+    <select id="exercise" name="exercise" required>
+        <option value="never">Never</option>
+        <option value="less_than_once">Less than once a week</option>
+        <option value="one_two">1-2 times a week</option>
+        <option value="three_four">3-4 times a week</option>
+        <option value="five_or_more">5 or more times a week</option>
+    </select><br><br>
+
+    <label for="diet">What is your typical daily diet like?</label>
+    <select id="diet" name="diet" required>
+        <option value="processed_red_meat">High in processed foods, red meat, and saturated fats</option>
+        <option value="moderate_processed">Moderate in processed foods, includes some fruits, vegetables, and whole grains</option>
+        <option value="fruits_vegetables">Primarily fruits, vegetables, whole grains, and lean protein</option>
+    </select><br><br>
+
+    <button type="button" onclick="previousPage()">Previous</button>
+    <button type="button" onclick="calculateRisk()">Calculate Risk</button>
+    <div id="result"></div>
+</form>
+
+
+
+<script>
+    function previousPage() {
+        // Redirecting to the previous page
+        window.location.href = "page1.html";
+    }
+
+    function calculateRisk() {
+    // Fetching user inputs (Part 2)
+    var age = parseInt(localStorage.getItem("age"));
+    var alcohol = parseInt(document.getElementById("alcohol").value);
+    var exercise = document.getElementById("exercise").value;
+    var diet = document.getElementById("diet").value;
+
+    // Fetching data from localStorage (Part 1)
+    var high_bp = localStorage.getItem("high_bp");
+    var high_chol = localStorage.getItem("high_chol");
+    var family_history = localStorage.getItem("family_history");
+    var diabetes = localStorage.getItem("diabetes");
+    var smoking = localStorage.getItem("smoking");
+
+    // Basic calculation based on inputs (for demonstration purpose only)
+    var risk = 0;
+
+    // Adjust risk based on age
+    if (age < 45) {
+        // For individuals younger than 45, reduce the impact of age and family history
+        risk += age * 0.1; // For example, every year increases risk by 0.1%
+        if (family_history === "yes") risk += 10; // Reduce the impact of family history
+    } else {
+        // For individuals 45 or older, apply standard weights
+        risk += age * 0.2; // For example, every year increases risk by 0.2%
+        if (family_history === "yes") risk += 25;
+    }
+
+    // Adjust risk based on alcohol consumption, smoking, and other factors
+    if (alcohol > 14 && age >= 45) {
+        risk += (alcohol - 14) * 0.7; // For individuals aged 45 or older, excessive alcohol consumption has a higher impact on risk
+    } else {
+        risk += alcohol * 0.3; // For individuals younger than 45 or those not consuming excessive alcohol, standard impact
+    }
+    
+    if (high_bp === "yes") risk += 20;
+    if (high_chol === "yes") risk += 15;
+    if (diabetes === "yes") risk += 30;
+    if (smoking === "yes") risk += 35;
+    if (exercise === "never") risk += 20;
+    if (diet === "processed_red_meat") risk += 25;
+
+    // Cap the risk between 0% and 80%
+    risk = Math.min(Math.max(risk, 0), 80);
+
+    // Displaying risk on the page
+    var resultContainer = document.getElementById("result");
+    resultContainer.innerHTML = "<p>Your heart attack risk is: " + risk.toFixed(2) + "%</p>";
+    resultContainer.style.display = "block"; // Show the result div
+}
+
+
+
+
+
+    function redirectToIndex() {
+        setTimeout(function() {
+            window.location.href = "index.html";
+        }, 300000); // 30 seconds delay
+        console.log("Hello");
+    }
+
+    // Call redirectToIndex function when the page loads
+    redirectToIndex();
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
